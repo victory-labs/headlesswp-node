@@ -1,0 +1,23 @@
+{
+  "name": "headlesswp",
+  "version": "0.1.0",
+  "description": "Node.js HeadlessWP SDK",
+  "homepage": "https://github.com/victory-labs/headlesswp-node#readme",
+  "bugs": {
+    "url": "https://github.com/victory-labs/headlesswp-node/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/victory-labs/headlesswp-node.git"
+  },
+  "license": "MIT",
+  "author": "Victory Labs",
+  "type": "commonjs",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}
