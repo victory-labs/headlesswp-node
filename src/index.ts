@@ -1,28 +1,17 @@
-import { HeadlessWPAuth } from './api-keys/auth';
-import { Posts } from './posts/posts';
-import { HeadlessWPPost } from './common/types';
-import { HeadlessWPError, APIError, AuthenticationError, ValidationError } from './common/errors';
+import { HeadlessWPConfig } from './common/types';
+import { Posts } from './posts/Posts';
+import { Pages } from './pages/Pages';
 
-/**
- * Main entry point for the WordPress API client
- * @example
- * ```typescript
- * const auth = new HeadlessWPAuth('your-api-key', 'your-api-secret');
- * const posts = new Posts('https://your-wordpress-site.com', auth);
- * 
- * // Get a list of posts
- * const allPosts = await posts.getPosts();
- * 
- * // Get a single post
- * const post = await posts.getPost(1);
- * ```
- */
-export {
-    HeadlessWPAuth,
-    Posts,
-    HeadlessWPPost,
-    HeadlessWPError,
-    APIError,
-    AuthenticationError,
-    ValidationError
-};
+export class HeadlessWP {
+  public posts: Posts;
+  public pages: Pages;
+
+  constructor(config: HeadlessWPConfig) {
+    this.posts = new Posts(config);
+    this.pages = new Pages(config);
+  }
+}
+
+export * from './common/types';
+export * from './posts/Posts';
+export * from './pages/Pages'; 

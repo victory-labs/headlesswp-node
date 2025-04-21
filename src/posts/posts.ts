@@ -1,41 +1,37 @@
-import { HeadlessWPBase } from '../common/base';
-import { HeadlessWPPost } from '../common/types';
-import { ValidationError } from '../common/errors';
+import { Client } from '../common/Client';
+import { HeadlessWPConfig, Post, ListOptions, ListResponse } from '../common/types';
 
-/**
- * Class for interacting with WordPress posts
- * Provides methods to fetch posts and individual post details
- */
-export class Posts extends HeadlessWPBase {
-    /**
-     * Fetches a list of posts with pagination
-     * @param page - Page number (default: 1)
-     * @param perPage - Number of posts per page (default: 10, max: 100)
-     * @returns Promise with an array of posts
-     * @throws ValidationError if page or perPage parameters are invalid
-     */
-    async getPosts(page = 1, perPage = 10): Promise<HeadlessWPPost[]> {
-        if (page < 1) {
-            throw new ValidationError('Page number must be greater than 0');
-        }
-        if (perPage < 1 || perPage > 100) {
-            throw new ValidationError('Posts per page must be between 1 and 100');
-        }
+export class Posts extends Client {
+  constructor(config: HeadlessWPConfig) {
+    super(config);
+  }
 
-        return this.fetchWithAuth<HeadlessWPPost[]>(`/posts?_embed&page=${page}&per_page=${perPage}`);
-    }
+  async list(options?: ListOptions): Promise<ListResponse<Post>> {
+    const response = await this.get<Post[]>('/wp/v2/posts', options);
+    const total = parseInt(this.client.defaults.headers['x-wp-total'] as string, 10);
+    const totalPages = parseInt(this.client.defaults.headers['x-wp-totalpages'] as string, 10);
+    
+    return {
+      data: response,
+      total,
+      totalPages,
+      currentPage: options?.page || 1,
+    };
+  }
 
-    /**
-     * Fetches a single post by ID
-     * @param id - The post ID
-     * @returns Promise with the post details
-     * @throws ValidationError if the post ID is invalid
-     */
-    async getPost(id: number): Promise<HeadlessWPPost> {
-        if (!id || id < 1) {
-            throw new ValidationError('Valid post ID is required');
-        }
+  async getById(id: number): Promise<Post> {
+    return this.get<Post>(`/wp/v2/posts/${id}`);
+  }
 
-        return this.fetchWithAuth<HeadlessWPPost>(`/posts/${id}?_embed`);
-    }
+  async create(data: Partial<Post>): Promise<Post> {
+    return this.post<Post>('/wp/v2/posts', data);
+  }
+
+  async update(id: number, data: Partial<Post>): Promise<Post> {
+    return this.put<Post>(`/wp/v2/posts/${id}`, data);
+  }
+
+  async deleteById(id: number): Promise<void> {
+    return this.delete<void>(`/wp/v2/posts/${id}`);
+  }
 } 
