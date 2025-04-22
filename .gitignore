@@ -12,3 +12,4 @@ server/dist
 public/dist
 test-results
 .idea
+package-lock.json

@@ -1,180 +1,91 @@
 # HeadlessWP SDK
 
-A TypeScript SDK for interacting with the HeadlessWP WordPress plugin.
+A TypeScript SDK for interacting with Headless WordPress sites using GraphQL and REST APIs.
 
 ## Installation
 
 ```bash
-npm install headlesswp
+npm install headlesswp-sdk
 ```
 
 ## Usage
 
 ```typescript
-import { HeadlessWP } from 'headlesswp';
+import HeadlessWPSDK from 'headlesswp-sdk';
 
 // Initialize the SDK
-const client = new HeadlessWP({
-  baseUrl: 'https://your-wordpress-site.com',
-  apiKey: 'your-api-key'
+const wp = new HeadlessWPSDK({
+  graphqlUrl: 'https://your-wordpress-site.com/graphql',
+  restApiUrl: 'https://your-wordpress-site.com/wp-json',
+  authToken: 'your-auth-token', // Optional
+  revalidate: 3600, // Optional, default is 1 hour
 });
 
-// List posts
-const posts = await client.posts.list({
-  per_page: 10,
-  page: 1
+// Fetch a post by slug
+const post = await wp.getPostBySlug('hello-world');
+
+// Fetch all posts
+const posts = await wp.getAllPosts();
+
+// Fetch a page by slug
+const page = await wp.getPageBySlug('about');
+
+// Fetch all pages
+const pages = await wp.getAllPages();
+
+// Fetch a menu by slug
+const menu = await wp.getMenuBySlug('primary');
+
+// Search content
+const results = await wp.search('search term');
+
+// Create a comment
+const comment = await wp.createComment({
+  postId: '123',
+  author: 'John Doe',
+  content: 'Great post!',
+  email: 'john@example.com'
 });
-
-// Get a single post
-const post = await client.posts.get(1);
-
-// Create a new post
-const newPost = await client.posts.create({
-  title: 'New Post',
-  content: 'Post content',
-  status: 'publish'
-});
-
-// Update a post
-const updatedPost = await client.posts.update(1, {
-  title: 'Updated Title'
-});
-
-// Delete a post
-await client.posts.delete(1);
-
-// List pages
-const pages = await client.pages.list({
-  per_page: 10,
-  page: 1
-});
-
-// Get a single page
-const page = await client.pages.get(1);
-
-// Create a new page
-const newPage = await client.pages.create({
-  title: 'New Page',
-  content: 'Page content',
-  status: 'publish'
-});
-
-// Update a page
-const updatedPage = await client.pages.update(1, {
-  title: 'Updated Title'
-});
-
-// Delete a page
-await client.pages.delete(1);
 ```
+
+## Features
+
+- TypeScript support
+- GraphQL queries for posts, pages, menus, and more
+- REST API search functionality
+- Comment creation
+- Preview mode support
+- Configurable caching
 
 ## API Reference
 
-### Posts
+### Configuration
 
-#### `list(options?: ListOptions): Promise<ListResponse<Post>>`
-List all posts with optional filtering and pagination.
-
-#### `get(id: number): Promise<Post>`
-Get a single post by ID.
-
-#### `create(data: Partial<Post>): Promise<Post>`
-Create a new post.
-
-#### `update(id: number, data: Partial<Post>): Promise<Post>`
-Update an existing post.
-
-#### `delete(id: number): Promise<void>`
-Delete a post.
-
-### Pages
-
-#### `list(options?: ListOptions): Promise<ListResponse<Page>>`
-List all pages with optional filtering and pagination.
-
-#### `get(id: number): Promise<Page>`
-Get a single page by ID.
-
-#### `create(data: Partial<Page>): Promise<Page>`
-Create a new page.
-
-#### `update(id: number, data: Partial<Page>): Promise<Page>`
-Update an existing page.
-
-#### `delete(id: number): Promise<void>`
-Delete a page.
-
-## Types
-
-### HeadlessWPConfig
 ```typescript
 interface HeadlessWPConfig {
-  baseUrl: string;
-  apiKey: string;
+  graphqlUrl: string;
+  restApiUrl?: string;
+  authToken?: string;
+  revalidate?: number;
+  siteName?: string;
+  siteDescription?: string;
+  siteUrl?: string;
 }
 ```
 
-### ListOptions
-```typescript
-interface ListOptions {
-  page?: number;
-  per_page?: number;
-  search?: string;
-  after?: string;
-  before?: string;
-  author?: number;
-  author_exclude?: number[];
-  exclude?: number[];
-  include?: number[];
-  offset?: number;
-  order?: 'asc' | 'desc';
-  orderby?: 'date' | 'id' | 'include' | 'relevance' | 'slug' | 'title';
-  slug?: string;
-  status?: string;
-  categories?: number[];
-  categories_exclude?: number[];
-  tags?: number[];
-  tags_exclude?: number[];
-  sticky?: boolean;
-}
-```
+### Methods
 
-### ListResponse
-```typescript
-interface ListResponse<T> {
-  data: T[];
-  total: number;
-  totalPages: number;
-  currentPage: number;
-}
-```
-
-## Error Handling
-
-The SDK throws errors when API requests fail. Errors include:
-- HTTP errors (4xx, 5xx)
-- Network errors
-- Validation errors
-
-Example error handling:
-```typescript
-try {
-  const post = await client.posts.get(1);
-} catch (error) {
-  if (error instanceof Error) {
-    console.error('Error:', error.message);
-  }
-}
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- `getPostBySlug(slug: string)`
+- `getPageBySlug(slug: string)`
+- `getAllPosts()`
+- `getAllPages()`
+- `getMenuBySlug(slug: string)`
+- `getCategoryBySlug(slug: string)`
+- `getTagBySlug(slug: string)`
+- `getPreview(id: string, idType: string)`
+- `createComment(input: CreateCommentInput)`
+- `search(query: string)`
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+MIT 
