@@ -1,90 +1,118 @@
-# HeadlessWP SDK
+# Headless WordPress TypeScript SDK
 
-A TypeScript SDK for interacting with Headless WordPress sites using GraphQL and REST APIs.
+A TypeScript SDK for interacting with Headless WordPress installations via GraphQL. This SDK provides a simple and type-safe way to interact with your WordPress backend from your frontend applications.
 
 ## Installation
 
 ```bash
-npm install headlesswp-sdk
+npm install headlesswp
+# or
+yarn add headlesswp
 ```
 
-## Usage
+## Configuration
+
+First, you'll need to configure the SDK with your WordPress GraphQL endpoint and optional settings:
 
 ```typescript
-import HeadlessWPSDK from 'headlesswp-sdk';
+import { HeadlessWP } from 'headlesswp';
 
-// Initialize the SDK
-const wp = new HeadlessWPSDK({
+const config = {
   graphqlUrl: 'https://your-wordpress-site.com/graphql',
-  restApiUrl: 'https://your-wordpress-site.com/wp-json',
-  authToken: 'your-auth-token', // Optional
-  revalidate: 3600, // Optional, default is 1 hour
-});
+  authToken: 'your-api-key',
+  revalidate: 3600, // Optional: cache revalidation time in seconds
+  siteName: 'Your Site Name', // Optional
+  siteDescription: 'Your Site Description', // Optional
+  siteUrl: 'https://your-site.com', // Optional
+};
 
-// Fetch a post by slug
+const wp = new HeadlessWP(config);
+```
+
+## Usage Examples
+
+### Fetching Posts
+
+```typescript
+// Get a single post by slug
 const post = await wp.getPostBySlug('hello-world');
 
-// Fetch all posts
+// Get all posts
 const posts = await wp.getAllPosts();
+```
 
-// Fetch a page by slug
+### Fetching Pages
+
+```typescript
+// Get a single page by slug
 const page = await wp.getPageBySlug('about');
 
-// Fetch all pages
+// Get all pages
 const pages = await wp.getAllPages();
+```
 
-// Fetch a menu by slug
-const menu = await wp.getMenuBySlug('primary');
+### Working with Menus
 
-// Search content
-const results = await wp.search('search term');
+```typescript
+// Get a menu by slug
+const menu = await wp.getMenuBySlug('primary-menu');
+```
 
-// Create a comment
+### Categories and Tags
+
+```typescript
+// Get a category by slug
+const category = await wp.getCategoryBySlug('news');
+
+// Get a tag by slug
+const tag = await wp.getTagBySlug('featured');
+```
+
+### Preview Mode
+
+```typescript
+// Get a preview of a post or page
+const preview = await wp.getPreview('123', 'DATABASE_ID');
+```
+
+### Comments
+
+```typescript
+// Create a new comment
 const comment = await wp.createComment({
   postId: '123',
   author: 'John Doe',
   content: 'Great post!',
-  email: 'john@example.com'
+  authorEmail: 'john@example.com',
 });
 ```
 
-## Features
-
-- TypeScript support
-- GraphQL queries for posts, pages, menus, and more
-- REST API search functionality
-- Comment creation
-- Preview mode support
-- Configurable caching
-
-## API Reference
-
-### Configuration
+### Search
 
 ```typescript
-interface HeadlessWPConfig {
-  graphqlUrl: string;
-  restApiUrl?: string;
-  authToken?: string;
-  revalidate?: number;
-  siteName?: string;
-  siteDescription?: string;
-  siteUrl?: string;
+// Search across posts and pages
+const results = await wp.search('search term');
+```
+
+## Error Handling
+
+The SDK includes built-in error handling for GraphQL requests. If a request fails, it will throw an error with detailed information about what went wrong.
+
+```typescript
+try {
+  const post = await wp.getPostBySlug('non-existent-post');
+} catch (error) {
+  console.error('Error fetching post:', error);
 }
 ```
 
-### Methods
+## Type Safety
 
-- `getPostBySlug(slug: string)`
-- `getPageBySlug(slug: string)`
-- `getAllPosts()`
-- `getAllPages()`
-- `getMenuBySlug(slug: string)`
-- `getCategoryBySlug(slug: string)`
-- `getTagBySlug(slug: string)`
-- `getPreview(id: string, idType: string)`
-- `createComment(input: CreateCommentInput)`
-- `search(query: string)`
+The SDK is built with TypeScript and includes type definitions for all operations. This provides excellent IDE support and compile-time type checking.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
