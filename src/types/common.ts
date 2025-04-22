@@ -1,20 +1,20 @@
 export interface GraphQLResponse<T = any> {
-  data?: T;
-  errors?: Array<{ message: string }>;
+    data?: T;
+    errors?: Array<{ message: string }>;
 }
 
 export interface SearchResults {
-  id: number;
-  title: string;
-  url: string;
-  type: string;
-  subtype: string;
+    id: number;
+    title: string;
+    url: string;
+    type: string;
+    subtype: string;
 }
 
 export interface FeaturedImage {
-  sourceUrl: string;
+    sourceUrl: string;
 }
 
 export interface Author {
-  name: string;
+    name: string;
 } 

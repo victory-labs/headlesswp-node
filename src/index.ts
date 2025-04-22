@@ -1,7 +1,6 @@
 import { HeadlessWPConfig } from './types/config';
 import { createClient } from './client';
-import * as queries from './queries';
-import * as mutations from './mutations';
+import * as headlesswp from './headlesswp';
 import { Post, Page, Menu } from './types/content';
 
 // Create a single instance for the default exports
@@ -33,45 +32,45 @@ export class HeadlessWP {
 
   // Queries
   getPostBySlug = (slug: string) => {
-    return queries.getPostBySlug(this.client, slug);
+    return headlesswp.getPostBySlug(this.client, slug);
   };
 
   getPageBySlug = (slug: string) => {
-    return queries.getPageBySlug(this.client, slug);
+    return headlesswp.getPageBySlug(this.client, slug);
   };
 
   getAllPosts = () => {
-    return queries.getAllPosts(this.client);
+    return headlesswp.getAllPosts(this.client);
   };
 
   getAllPages = () => {
-    return queries.getAllPages(this.client);
+    return headlesswp.getAllPages(this.client);
   };
 
   getMenuBySlug = (slug: string) => {
-    return queries.getMenuBySlug(this.client, slug);
+    return headlesswp.getMenuBySlug(this.client, slug);
   };
 
   getCategoryBySlug = (slug: string) => {
-    return queries.getCategoryBySlug(this.client, slug);
+    return headlesswp.getCategoryBySlug(this.client, slug);
   };
 
   getTagBySlug = (slug: string) => {
-    return queries.getTagBySlug(this.client, slug);
+    return headlesswp.getTagBySlug(this.client, slug);
   };
 
   getPreview = (id: string, idType: string) => {
-    return queries.getPreview(this.client, id, idType);
+    return headlesswp.getPreview(this.client, id, idType);
   };
 
   // Mutations
   createComment = (input: any) => {
-    return mutations.createComment(this.client, input);
+    return headlesswp.createComment(this.client, input);
   };
 
   // Search
   search = (query: string) => {
-    return queries.searchQuery(this.client, query);
+    return headlesswp.searchQuery(this.client, query);
   };
 
   // Next.js specific methods with error handling
