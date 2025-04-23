@@ -31,8 +31,8 @@ export function createClient(config: HeadlessWPConfig) {
       };
 
       // If preview mode is enabled and we have a token
-      if (preview && mergedConfig.authToken) {
-        headers['Authorization'] = `Bearer ${mergedConfig.authToken}`;
+      if (preview && mergedConfig.apiKey) {
+        headers['Authorization'] = `Bearer ${mergedConfig.apiKey}`;
       }
 
       // Get the slug for cache tagging

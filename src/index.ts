@@ -7,21 +7,26 @@ import { Post, Page, Menu } from './types/content';
 let defaultInstance: HeadlessWP | null = null;
 
 export class HeadlessWP {
-  private client: ReturnType<typeof createClient>;
+  private readonly client: ReturnType<typeof createClient>;
   private config: HeadlessWPConfig;
 
   constructor(config?: HeadlessWPConfig) {
     // If no config is provided, try to use Next.js environment variables
     if (!config) {
       const graphqlUrl = process.env.NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL;
+      const apiKey = process.env.HEADLESSWP_API_KEY;
       
       if (!graphqlUrl) {
         throw new Error('NEXT_PUBLIC_WORDPRESS_GRAPHQL_URL is not defined');
       }
 
+      if (!apiKey) {
+        throw new Error('HEADLESSWP_API_KEY is not defined');
+      }
+
       config = {
         graphqlUrl,
-        authToken: process.env.NEXT_PUBLIC_WORDPRESS_AUTH_TOKEN,
+        apiKey,
         revalidate: 3600, // 1 hour
       };
     }

@@ -1,6 +1,6 @@
 export interface HeadlessWPConfig {
     graphqlUrl: string;
-    authToken?: string | undefined;
+    apiKey?: string | undefined;
     revalidate?: number;
     siteName?: string;
     siteDescription?: string;

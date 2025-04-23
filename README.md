@@ -19,7 +19,7 @@ import { HeadlessWP } from 'headlesswp';
 
 const config = {
   graphqlUrl: 'https://your-wordpress-site.com/graphql',
-  authToken: 'your-api-key',
+  apiKey: 'your-api-key',
   revalidate: 3600, // Optional: cache revalidation time in seconds
   siteName: 'Your Site Name', // Optional
   siteDescription: 'Your Site Description', // Optional
